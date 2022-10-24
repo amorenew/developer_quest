@@ -13,10 +13,10 @@ void main() {
         child: MaterialApp(
           home: Consumer<World>(
             builder: (context, world, child) => TextButton(
-                  key: buttonKey,
-                  onPressed: () => world.start(),
-                  child: Text(world.isRunning ? 'Stop' : 'Start'),
-                ),
+              key: buttonKey,
+              onPressed: () => world.start(),
+              child: Text(world.isRunning ? 'Stop' : 'Start'),
+            ),
           ),
         ),
       ),

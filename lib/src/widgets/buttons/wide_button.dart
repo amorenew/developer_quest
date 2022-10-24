@@ -14,10 +14,10 @@ class WideButton extends StatelessWidget {
 
   const WideButton({
     required this.child,
-     this.onPressed,
-     this.background,
-     this.buttonKey,
-     this.shadowColor,
+    this.onPressed,
+    this.background,
+    this.buttonKey,
+    this.shadowColor,
     this.paddingTweak = const EdgeInsets.all(0),
     this.enabled = true,
   });

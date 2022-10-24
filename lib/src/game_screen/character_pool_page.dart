@@ -105,7 +105,7 @@ class CharacterDisplay extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded( 
+            Expanded(
               child: HiringBust(
                 particleColor: attentionColor,
                 filename: characterStyle.flare,

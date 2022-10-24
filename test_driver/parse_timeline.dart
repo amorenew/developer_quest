@@ -72,7 +72,7 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
   int? prevFrameRequestStart;
   final frameRequestDurations = <Duration>[];
 
-  for (final ev in timeline.events??<TimelineEvent>[]) {
+  for (final ev in timeline.events ?? <TimelineEvent>[]) {
     if (ev.phase == 'X' && ev.category == 'Dart') {
       // Dart thread event with duration.
       dartPhaseEvents += 1;

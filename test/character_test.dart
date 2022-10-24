@@ -1,5 +1,5 @@
 import 'package:dev_rpg/src/shared_state/game/world.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('cannot hire without money', () {

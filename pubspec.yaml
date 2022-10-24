@@ -35,8 +35,6 @@ dev_dependencies:
   logging: ^1.1.0
   git: ^2.0.0 
   t_stats: ^3.0.0 
-  test: ^1.21.6
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

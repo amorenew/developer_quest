@@ -25,7 +25,9 @@ class RpgLayoutBuilder extends StatelessWidget {
     var mediaWidth = MediaQuery.of(context).size.width;
     final RpgLayout layout = mediaWidth >= ultraWideLayoutThreshold
         ? RpgLayout.ultrawide
-        : mediaWidth > wideLayoutThreshold ? RpgLayout.wide : RpgLayout.slim;
+        : mediaWidth > wideLayoutThreshold
+            ? RpgLayout.wide
+            : RpgLayout.slim;
     return builder(context, layout);
   }
 
