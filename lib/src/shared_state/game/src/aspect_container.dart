@@ -6,7 +6,7 @@ abstract class AspectContainer<T extends Aspect> extends Aspect {
   final List<T> children;
   AspectContainer() : children = [];
   bool _guardRemove = false;
-  List<T> _queuedRemoval;
+  List<T>? _queuedRemoval;
 
   // Whether or not this container gets marked dirty when a child is dirty.
   bool get inheritsDirt => false;
@@ -25,7 +25,7 @@ abstract class AspectContainer<T extends Aspect> extends Aspect {
 
     // Process any queued removals.
     if (_queuedRemoval != null) {
-      _queuedRemoval.forEach(children.remove);
+      _queuedRemoval?.forEach(children.remove);
       _queuedRemoval = null;
       markDirty();
     }
@@ -57,7 +57,7 @@ abstract class AspectContainer<T extends Aspect> extends Aspect {
     // queue the removal and process it on our next update.
     if (_guardRemove) {
       _queuedRemoval ??= [];
-      _queuedRemoval.add(aspect);
+      _queuedRemoval?.add(aspect);
       return;
     }
     children.remove(aspect);

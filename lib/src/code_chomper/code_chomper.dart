@@ -28,7 +28,7 @@ class CodeChomper extends StatefulWidget {
 }
 
 class _CodeChomperState extends State<CodeChomper> {
-  CodeChomperController _chomperController;
+  late CodeChomperController _chomperController;
   bool _isGameOver = false;
   @override
   void initState() {
@@ -191,16 +191,18 @@ class _GameOverScreen extends StatelessWidget {
                     style: chompTextStyle.apply(fontSizeDelta: 26),
                   ),
                   const SizedBox(height: 30),
-                  FlatButton(
-                    onPressed: () => Navigator.pop(context, null),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
-                    color: const Color.fromRGBO(27, 26, 68, 1),
-                    shape: Border.all(width: 1, color: chompBlue),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      fixedSize: const Size.fromWidth(100),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 10),
+                    ),
                     child: Text(
                       'CONTINUE',
                       style: chompTextStyle.apply(fontSizeDelta: 8),
                     ),
+                    onPressed: () => Navigator.pop(context, null),
                   ),
                   const SizedBox(height: 40),
                 ],
@@ -323,8 +325,8 @@ class _ChompyKey extends StatefulWidget {
 
 class _ChompyKeyState extends State<_ChompyKey>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<Color> _colorTween;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTween;
 
   @override
   void initState() {
@@ -353,17 +355,17 @@ class _ChompyKeyState extends State<_ChompyKey>
       child: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) => Container(
-              margin: const EdgeInsets.all(_keyPadding / 2),
-              height: 42,
-              width: widget.width,
-              decoration: BoxDecoration(
-                color: _colorTween.value,
-                border: Border.all(
-                  color: chompBlue.withOpacity(0.5),
-                  width: 1,
-                ),
-              ),
+          margin: const EdgeInsets.all(_keyPadding / 2),
+          height: 42,
+          width: widget.width,
+          decoration: BoxDecoration(
+            color: _colorTween.value,
+            border: Border.all(
+              color: chompBlue.withOpacity(0.5),
+              width: 1,
             ),
+          ),
+        ),
       ),
     );
   }

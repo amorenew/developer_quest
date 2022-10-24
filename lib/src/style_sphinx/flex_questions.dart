@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 class ColumnQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/vertical_positioning';
 
-  const ColumnQuestion({Key key}) : super(key: key);
+  const ColumnQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ColumnQuestion extends StatelessWidget {
 class RowQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/horizontal_positioning';
 
-  const RowQuestion({Key key}) : super(key: key);
+  const RowQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class RowQuestion extends StatelessWidget {
 class StackQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/layer_widgets';
 
-  const StackQuestion({Key key}) : super(key: key);
+  const StackQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +63,10 @@ class _FlexQuestion extends StatefulWidget {
   final String instructions;
 
   const _FlexQuestion({
-    @required this.type,
-    @required this.successMessage,
-    @required this.instructions,
-    Key key,
+    required this.type,
+    required this.successMessage,
+    required this.instructions,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -78,7 +78,7 @@ class _FlexQuestionState extends State<_FlexQuestion> {
     KittyType.orange,
     KittyType.yellow,
   ];
-  Type _type;
+  late Type _type;
 
   bool get _isCorrect => _type == widget.type;
 
@@ -191,9 +191,11 @@ class _FlexQuestionState extends State<_FlexQuestion> {
     );
   }
 
-  void _onDropdownChange(Type type) {
+  void _onDropdownChange(Type? type) {
     // Update the state to show the change
-    setState(() => _type = type);
+    if (type != null) {
+      setState(() => _type = type);
+    }
 
     // Then, if the user has selected the correct option, display the Success
     // Sphinx!
@@ -212,10 +214,10 @@ class _FlexQuestionExpected extends StatelessWidget {
   final EdgeInsets iconPadding;
 
   const _FlexQuestionExpected({
-    @required this.kittens,
-    @required this.type,
+    required this.kittens,
+    required this.type,
     this.iconPadding = const EdgeInsets.all(4),
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -248,12 +250,12 @@ class _FlexQuestionActual extends StatelessWidget {
   final bool bouncing;
 
   const _FlexQuestionActual({
-    @required this.kittens,
-    @required this.actualType,
-    @required this.expectedType,
-    @required this.bouncing,
+    required this.kittens,
+    required this.actualType,
+    required this.expectedType,
+    required this.bouncing,
     this.iconPadding = const EdgeInsets.all(4),
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -295,9 +297,9 @@ class _StartingPosition extends StatelessWidget {
   final Type type;
 
   const _StartingPosition({
-    @required this.children,
-    @required this.type,
-    Key key,
+    required this.children,
+    required this.type,
+    Key? key,
   }) : super(key: key);
 
   @override

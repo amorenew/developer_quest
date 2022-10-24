@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 class MainAxisStartQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_1';
 
-  const MainAxisStartQuestion({Key key}) : super(key: key);
+  const MainAxisStartQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class MainAxisStartQuestion extends StatelessWidget {
 class MainAxisEndQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_2';
 
-  const MainAxisEndQuestion({Key key}) : super(key: key);
+  const MainAxisEndQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class MainAxisEndQuestion extends StatelessWidget {
 class MainAxisCenterQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_3';
 
-  const MainAxisCenterQuestion({Key key}) : super(key: key);
+  const MainAxisCenterQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class MainAxisCenterQuestion extends StatelessWidget {
 class MainAxisSpaceAroundQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_4';
 
-  const MainAxisSpaceAroundQuestion({Key key}) : super(key: key);
+  const MainAxisSpaceAroundQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class MainAxisSpaceAroundQuestion extends StatelessWidget {
 class MainAxisSpaceBetweenQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_5';
 
-  const MainAxisSpaceBetweenQuestion({Key key}) : super(key: key);
+  const MainAxisSpaceBetweenQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class MainAxisSpaceBetweenQuestion extends StatelessWidget {
 class MainAxisSpaceEvenlyQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_6';
 
-  const MainAxisSpaceEvenlyQuestion({Key key}) : super(key: key);
+  const MainAxisSpaceEvenlyQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class MainAxisSpaceEvenlyQuestion extends StatelessWidget {
 class RowMainAxisStartQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_7';
 
-  const RowMainAxisStartQuestion({Key key}) : super(key: key);
+  const RowMainAxisStartQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +135,7 @@ class RowMainAxisStartQuestion extends StatelessWidget {
 class RowMainAxisEndQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_8';
 
-  const RowMainAxisEndQuestion({Key key}) : super(key: key);
+  const RowMainAxisEndQuestion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +153,7 @@ class RowMainAxisEndQuestion extends StatelessWidget {
 class RowMainAxisSpaceBetween extends StatelessWidget {
   static const String routeName = '/sphinx/main_axis_question_9';
 
-  const RowMainAxisSpaceBetween({Key key}) : super(key: key);
+  const RowMainAxisSpaceBetween({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,12 +176,12 @@ class _MainAxisQuestion extends StatefulWidget {
   final String instructions;
 
   const _MainAxisQuestion({
-    @required this.flexType,
-    @required this.successMessage,
-    @required this.instructions,
+    required this.flexType,
+    required this.successMessage,
+    required this.instructions,
     this.expectedMainAxisAlignment = MainAxisAlignment.start,
     this.expectedCrossAxisAlignment = CrossAxisAlignment.center,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -193,7 +193,7 @@ class _MainAxisQuestionState extends State<_MainAxisQuestion> {
     KittyType.orange,
     KittyType.yellow,
   ];
-  MainAxisAlignment _alignment;
+  MainAxisAlignment? _alignment;
 
   bool get _isCorrect => _alignment == widget.expectedMainAxisAlignment;
 
@@ -214,7 +214,7 @@ class _MainAxisQuestionState extends State<_MainAxisQuestion> {
       actual: _AxisQuestionActual(
         kittens: _kittens,
         flexType: widget.flexType,
-        actualMainAxisAlignment: _alignment,
+        actualMainAxisAlignment: _alignment ?? MainAxisAlignment.start,
         expectedCrossAxisAlignment: widget.expectedCrossAxisAlignment,
         expectedMainAxisAlignment: widget.expectedMainAxisAlignment,
         bouncing: !_isCorrect,
@@ -331,7 +331,7 @@ class _MainAxisQuestionState extends State<_MainAxisQuestion> {
     );
   }
 
-  void _onDropdownChange(MainAxisAlignment alignment) {
+  void _onDropdownChange(MainAxisAlignment? alignment) {
     // Update the state to show the change
     setState(() => _alignment = alignment);
 
@@ -354,12 +354,12 @@ class _AxisQuestionExpected extends StatelessWidget {
   final EdgeInsets iconPadding;
 
   const _AxisQuestionExpected({
-    @required this.kittens,
-    @required this.flexType,
+    required this.kittens,
+    required this.flexType,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.iconPadding = const EdgeInsets.all(4),
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -387,23 +387,23 @@ class _AxisQuestionExpected extends StatelessWidget {
 class _AxisQuestionActual extends StatelessWidget {
   final List<KittyType> kittens;
   final Type flexType;
-  final MainAxisAlignment actualMainAxisAlignment;
-  final CrossAxisAlignment actualCrossAxisAlignment;
+  final MainAxisAlignment? actualMainAxisAlignment;
+  final CrossAxisAlignment? actualCrossAxisAlignment;
   final MainAxisAlignment expectedMainAxisAlignment;
   final CrossAxisAlignment expectedCrossAxisAlignment;
   final EdgeInsets iconPadding;
   final bool bouncing;
 
   const _AxisQuestionActual({
-    @required this.kittens,
-    @required this.flexType,
-    @required this.bouncing,
-    @required this.expectedMainAxisAlignment,
-    @required this.expectedCrossAxisAlignment,
+    required this.kittens,
+    required this.flexType,
+    required this.bouncing,
+    required this.expectedMainAxisAlignment,
+    required this.expectedCrossAxisAlignment,
     this.actualMainAxisAlignment,
     this.actualCrossAxisAlignment,
     this.iconPadding = const EdgeInsets.all(4),
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

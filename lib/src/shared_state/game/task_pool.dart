@@ -110,7 +110,7 @@ class TaskPool extends AspectContainer with ChildAspect {
   }
 
   void addBug(Bug bug) {
-    get<World>().company.joy.number -= bug.priority.drainOfJoy;
+    get<World>()?.company.joy.number -= bug.priority.drainOfJoy;
     availableBugs.add(bug);
     markDirty();
   }
@@ -122,10 +122,10 @@ class TaskPool extends AspectContainer with ChildAspect {
     markDirty();
 
     // Sum bug chances from assigned characters and built-in bug chance.
-    double totalBugChance = task.assignedTeam
+    double totalBugChance = task.assignedTeam!
         .fold(featureBugChance, (a, b) => a + b.bugChanceOffset);
     _bugChance += totalBugChance;
-    int maxBugsAdded = task.assignedTeam
+    int maxBugsAdded = task.assignedTeam!
         .fold(defaultBugNumber, (a, b) => max(a, b.bugQuantity));
     _numberOfBugsToAdd =
         max(defaultBugNumber, bugRandom.nextInt(maxBugsAdded) + 1);
@@ -144,7 +144,7 @@ class TaskPool extends AspectContainer with ChildAspect {
       // Winner! Well...
       _bugChance = ambientBugChance;
       for (int i = 0; i < _numberOfBugsToAdd; i++) {
-        addBug(Bug.random(get<World>().characterPool.availableSkills));
+        addBug(Bug.random(get<World>()!.characterPool.availableSkills));
       }
       _numberOfBugsToAdd = defaultBugNumber;
     }
@@ -160,7 +160,7 @@ class TaskPool extends AspectContainer with ChildAspect {
 
   void squashBug(Bug bug) {
     // Give back the joy.
-    get<World>().company.joy.number += bug.priority.drainOfJoy;
+    get<World>()!.company.joy.number += bug.priority.drainOfJoy;
     workItems.remove(bug);
     removeAspect(bug);
     markDirty();

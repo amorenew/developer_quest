@@ -23,7 +23,7 @@ class Character extends Aspect with ChildAspect {
   bool _isHired = false;
   bool get isHired => _isHired;
 
-  final int customHiringCost;
+  final int? customHiringCost;
   final int costMultiplier;
 
   /// This value will get summed with [TaskPool.featureBugChance]
@@ -71,13 +71,13 @@ class Character extends Aspect with ChildAspect {
   String toString() => id;
 
   int get upgradeCost => !_isHired && customHiringCost != null
-      ? customHiringCost
+      ? customHiringCost!
       : prowess.values.fold(0, (int previous, int value) => previous + value) *
           (_isHired ? 110 : 220) *
           costMultiplier;
 
   bool get canUpgradeOrHire {
-    Company company = get<World>().company;
+    Company company = get<World>()!.company;
     // Make sure there's some skill that's below max (meaning we can bump
     // it up).
     if (prowess.values.firstWhere((value) => value < maxSkillProwess,
@@ -92,7 +92,7 @@ class Character extends Aspect with ChildAspect {
 
   bool hire() {
     assert(!_isHired);
-    Company company = get<World>().company;
+    Company company = get<World>()!.company;
     if (!company.spend(upgradeCost)) {
       return false;
     }
@@ -103,12 +103,12 @@ class Character extends Aspect with ChildAspect {
 
   bool upgrade() {
     assert(_isHired);
-    Company company = get<World>().company;
+    Company company = get<World>()!.company;
     if (!company.spend(upgradeCost)) {
       return false;
     }
     for (final Skill skill in prowess.keys) {
-      prowess[skill] += 1;
+      prowess[skill] = prowess[skill]! + 1;
     }
     _level++;
     markDirty();

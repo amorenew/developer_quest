@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 class TasksButtonHeader extends SliverPersistentHeaderDelegate {
   final TaskPool taskPool;
   final double scale;
-  const TasksButtonHeader({this.taskPool, this.scale});
+  const TasksButtonHeader({required this.taskPool, required this.scale});
 
   Future<void> _pickTeam(BuildContext context, WorkItem item) async {
     // immediately show the character picker for this newly

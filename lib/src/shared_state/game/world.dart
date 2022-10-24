@@ -16,9 +16,9 @@ class World extends AspectContainer {
 
   static Duration tickDuration = const Duration(milliseconds: 200);
 
-  Timer _timer;
+  Timer? _timer;
   double _joyAccumulation = 0;
-  Timer _joyResetTimer;
+  Timer? _joyResetTimer;
 
   final CharacterPool characterPool;
 
@@ -42,11 +42,11 @@ class World extends AspectContainer {
 
   void pause() {
     if (_joyResetTimer?.isActive ?? false) {
-      _joyResetTimer.cancel();
+      _joyResetTimer?.cancel();
       _resetJoy();
     }
 
-    _timer.cancel();
+    _timer?.cancel();
     _isRunning = false;
     markDirty();
   }
@@ -99,8 +99,8 @@ class World extends AspectContainer {
   @override
   void dispose() {
     _joyResetTimer?.cancel();
-    if (_timer.isActive) {
-      _timer.cancel();
+    if (_timer?.isActive ?? false) {
+      _timer?.cancel();
     }
     super.dispose();
   }

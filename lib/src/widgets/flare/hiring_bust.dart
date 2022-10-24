@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:dev_rpg/src/widgets/flare/desaturated_actor.dart';
 import 'package:dev_rpg/src/widgets/flare/hiring_particles.dart';
 import 'package:dev_rpg/src/style.dart';
+import 'package:flare_flutter/base/math/aabb.dart';
 import 'package:flare_flutter/flare.dart';
+import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flare_dart/math/mat2d.dart';
-import 'package:flare_dart/math/aabb.dart';
 import 'package:flare_flutter/flare_render_box.dart';
+import 'package:flutter/services.dart';
 
 /// The HiringBust displays three different visual states.
 /// [locked] is for when the character is not available for hire,
@@ -26,20 +27,21 @@ class HiringBust extends LeafRenderObjectWidget {
   final bool isPlaying;
   final Color particleColor;
 
-  const HiringBust(
-      {this.fit = BoxFit.contain,
-      this.alignment = Alignment.center,
-      this.hiringState,
-      this.filename,
-      this.particleColor,
-      this.isPlaying = false});
+  const HiringBust({
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    required this.hiringState,
+    required this.filename,
+    this.particleColor = Colors.black,
+    this.isPlaying = false,
+  });
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return HiringBustRenderObject()
       ..particleColor = particleColor
-      ..assetBundle = DefaultAssetBundle.of(context)
       ..filename = filename
+      .._buildContext = context
       ..fit = fit
       ..alignment = alignment
       ..hiringState = hiringState
@@ -52,8 +54,8 @@ class HiringBust extends LeafRenderObjectWidget {
       BuildContext context, covariant HiringBustRenderObject renderObject) {
     renderObject
       ..particleColor = particleColor
-      ..assetBundle = DefaultAssetBundle.of(context)
       ..filename = filename
+      .._buildContext = context
       ..fit = fit
       ..hiringState = hiringState
       ..alignment = alignment
@@ -72,14 +74,16 @@ class HiringBust extends LeafRenderObjectWidget {
 /// bust and draws a particle effect when the [hiringState] is set to
 /// [HiringBustState.available]
 class HiringBustRenderObject extends FlareRenderBox {
-  FlutterActorArtboard _artboard;
-  String _filename;
-  HiringBustState _hiringState;
-  DesaturatedActor _actor;
-  HiringParticles _particles;
-  bool _isPlaying;
+  FlutterActorArtboard? _artboard;
+  String? _filename;
+  HiringBustState? _hiringState;
+  DesaturatedActor? _actor;
+  HiringParticles? _particles;
+  bool? _isPlaying;
+  BuildContext? _buildContext;
+
   @override
-  bool get isPlaying => _isPlaying;
+  bool get isPlaying => _isPlaying ?? false;
 
   set isPlaying(bool value) {
     if (value == _isPlaying) {
@@ -89,14 +93,14 @@ class HiringBustRenderObject extends FlareRenderBox {
     updatePlayState();
   }
 
-  ActorAnimation _idleAnimation;
+  ActorAnimation? _idleAnimation;
   double _idleTime = 0;
-  Color particleColor;
+  late Color particleColor;
   bool playIdleAnimation = false;
 
-  ActorAnimation _bust;
+  ActorAnimation? _bust;
 
-  HiringBustState get hiringState => _hiringState;
+  HiringBustState get hiringState => _hiringState!;
   set hiringState(HiringBustState value) {
     if (_hiringState == value) {
       return;
@@ -115,13 +119,13 @@ class HiringBustRenderObject extends FlareRenderBox {
     if (_artboard != null) {
       switch (_hiringState) {
         case HiringBustState.working:
-          _idleAnimation = _artboard.getAnimation('working');
+          _idleAnimation = _artboard?.getAnimation('working');
           break;
         case HiringBustState.success:
-          _idleAnimation = _artboard.getAnimation('success');
+          _idleAnimation = _artboard?.getAnimation('success');
           break;
         default:
-          _idleAnimation = _artboard.getAnimation('idle');
+          _idleAnimation = _artboard?.getAnimation('idle');
           break;
       }
     }
@@ -139,8 +143,9 @@ class HiringBustRenderObject extends FlareRenderBox {
   bool advance(double elapsedSeconds) {
     if (playIdleAnimation && _idleAnimation != null) {
       _idleTime += elapsedSeconds;
-      _idleAnimation.apply(_idleTime % _idleAnimation.duration, _artboard, 1);
-      _bust?.apply(0, _artboard, 1);
+      _idleAnimation?.apply(
+          _idleTime % _idleAnimation!.duration, _artboard!, 1);
+      _bust?.apply(0, _artboard!, 1);
     }
     _artboard?.advance(elapsedSeconds);
     _particles?.advance(elapsedSeconds, Size(shadowWidth, size.height));
@@ -159,7 +164,7 @@ class HiringBustRenderObject extends FlareRenderBox {
   /// The base FlareRenderBox will use this to compute the correct scale
   /// and translation to apply to the canvas before calling [paintFlare].
   @override
-  AABB get aabb => _artboard?.artboardAABB();
+  AABB get aabb => _artboard?.artboardAABB() ?? AABB.fromValues(1, 1, 1, 1);
 
   /// This is called before the canvas is translated and scaled for the
   /// bounds retuerned by the [aabb] getter.
@@ -207,7 +212,7 @@ class HiringBustRenderObject extends FlareRenderBox {
         offset + Offset((size.width - shadowWidth) / 2, -shadowHeight / 2));
   }
 
-  String get filename => _filename;
+  String get filename => _filename!;
   set filename(String value) {
     if (_filename == value) {
       return;
@@ -220,18 +225,24 @@ class HiringBustRenderObject extends FlareRenderBox {
   /// to the implementation, so we need to load our content here.
   @override
   Future<void> load() async {
-    FlutterActor actor = await loadFlare(_filename);
+    FlutterActor? actor = await loadFlare(
+      AssetFlare(
+        bundle: DefaultAssetBundle.of(_buildContext!),
+        name: _filename!,
+      ),
+    );
+
     if (actor == null) {
       return;
     }
     _actor = DesaturatedActor();
-    _actor.copyFlutterActor(actor);
-    _artboard = _actor.artboard as FlutterActorArtboard;
+    _actor?.copyFlutterActor(actor);
+    _artboard = _actor?.artboard as FlutterActorArtboard;
     // apply the bust animation state.
-    _bust = _artboard.getAnimation('bust');
-    _bust?.apply(0, _artboard, 1);
+    _bust = _artboard?.getAnimation('bust');
+    _bust?.apply(0, _artboard!, 1);
 
-    _artboard.initializeGraphics();
+    _artboard?.initializeGraphics();
     _updateState();
 
     advance(0);

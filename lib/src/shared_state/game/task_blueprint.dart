@@ -33,7 +33,7 @@ class TaskBlueprint implements Prerequisite {
   final List<String> mutuallyExclusive;
 
   const TaskBlueprint(this.name, this.difficulty,
-      {@required this.requirements,
+      {required this.requirements,
       this.userReward = 100,
       this.coinReward = 80,
       this.priority = 0,

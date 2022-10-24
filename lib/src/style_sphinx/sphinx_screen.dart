@@ -15,7 +15,7 @@ class SphinxScreen extends StatefulWidget {
   static const ImageProvider pyramid =
       AssetImage('assets/style_sphinx/pyramid.png');
 
-  const SphinxScreen({Key key, this.fullGame = false}) : super(key: key);
+  const SphinxScreen({Key? key, this.fullGame = false}) : super(key: key);
 
   final bool fullGame;
 

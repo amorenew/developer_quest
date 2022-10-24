@@ -20,13 +20,13 @@ class WorkListItem extends StatelessWidget {
   final Widget heading;
   final Color progressColor;
   final WorkItem workItem;
-  final HandleTapCallback handleTap;
+  final HandleTapCallback? handleTap;
 
   const WorkListItem({
-    this.workItem,
+    required this.workItem,
     this.isExpanded = true,
-    this.heading,
-    this.progressColor,
+    required this.heading,
+    required this.progressColor,
     this.handleTap,
   });
 
@@ -44,7 +44,7 @@ class WorkListItem extends StatelessWidget {
       );
 
   Future<void> _handleTap(BuildContext context, WorkItem workItem) async {
-    if ((handleTap != null && handleTap()) || workItem.isComplete) {
+    if ((handleTap != null && handleTap!()) || workItem.isComplete) {
       return;
     }
 
@@ -52,7 +52,7 @@ class WorkListItem extends StatelessWidget {
       context: context,
       builder: (context) => TeamPickerModal(workItem),
     );
-    _onAssigned(workItem, characters);
+    _onAssigned(workItem, characters ?? {});
   }
 
   void _onAssigned(WorkItem workItem, Set<Character> value) {
@@ -118,9 +118,9 @@ class WorkListItem extends StatelessWidget {
 
 class TeamProgressIndicator extends StatelessWidget {
   const TeamProgressIndicator({
-    this.workItem,
-    this.isExpanded,
-    this.progressColor,
+    required this.workItem,
+    required this.isExpanded,
+    required this.progressColor,
   });
 
   final WorkItem workItem;

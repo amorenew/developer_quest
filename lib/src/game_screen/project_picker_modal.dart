@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 /// tasks that makes sense given the current state of availability.
 class _PrunedTaskNode implements TreeData {
   @override
-  List<_PrunedTaskNode> children;
+  List<_PrunedTaskNode> children = [];
   final TaskDisplay display;
   final TaskBlueprint blueprint;
 
-  _PrunedTaskNode({this.blueprint, this.display});
+  _PrunedTaskNode({required this.blueprint, required this.display});
 
   /// Find the deepest level of the tree that has an available item in it.
   /// Add it to the available list.
@@ -34,7 +34,7 @@ class _PrunedTaskNode implements TreeData {
 
   /// Remove branches that are completely dead (parent, self, and children
   /// are not available)
-  bool pruneDeadBranches([_PrunedTaskNode parent]) {
+  bool pruneDeadBranches([_PrunedTaskNode? parent]) {
     children.removeWhere((child) => child.pruneDeadBranches(this));
     return children.isEmpty &&
         display != TaskDisplay.available &&
@@ -46,7 +46,7 @@ class _PrunedTaskNode implements TreeData {
 /// display set.
 List<_PrunedTaskNode> _pruneTasks(List<TaskNode> fullTree,
     List<TaskBlueprint> available, List<TaskBlueprint> completed,
-    [_PrunedTaskNode parent]) {
+    [_PrunedTaskNode? parent]) {
   // First build up the full tree with correct display state.
   var prePruned = <_PrunedTaskNode>[];
   for (final node in fullTree) {

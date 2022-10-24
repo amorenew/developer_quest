@@ -24,10 +24,10 @@ class CharacterPoolPage extends StatelessWidget {
           gridDelegate: _gridStructure,
           itemBuilder: (context, index) =>
               ChangeNotifierProvider<Character>.value(
-                notifier: characterPool.children[index],
-                key: ValueKey(characterPool.children[index]),
-                child: CharacterListItem(),
-              ),
+            value: characterPool.children[index],
+            key: ValueKey(characterPool.children[index]),
+            child: CharacterListItem(),
+          ),
         ),
         _fadeOverlay,
       ],
@@ -105,7 +105,7 @@ class CharacterDisplay extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
+            Expanded( 
               child: HiringBust(
                 particleColor: attentionColor,
                 filename: characterStyle.flare,
@@ -127,12 +127,12 @@ class CharacterDisplay extends StatelessWidget {
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
 
   void _showModal(BuildContext context) {
-    var character = Provider.of<Character>(context);
+    var character = Provider.of<Character>(context, listen: false);
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return ChangeNotifierProvider<Character>.value(
-            notifier: character,
+            value: character,
             child: CharacterModal(),
           );
         });

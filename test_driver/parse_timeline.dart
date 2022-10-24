@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart'
-    show Timeline, TimelineSummary;
+    show Timeline, TimelineEvent, TimelineSummary;
 import 'package:logging/logging.dart';
 import 'package:t_stats/t_stats.dart';
 
@@ -68,15 +68,15 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
   var durationMicros = 0;
   // Previous events per each thread.
   Map<int, int> prevs = {};
-  String prevFrameRequestId;
-  int prevFrameRequestStart;
+  String? prevFrameRequestId;
+  int? prevFrameRequestStart;
   final frameRequestDurations = <Duration>[];
 
-  for (final ev in timeline.events) {
+  for (final ev in timeline.events??<TimelineEvent>[]) {
     if (ev.phase == 'X' && ev.category == 'Dart') {
       // Dart thread event with duration.
       dartPhaseEvents += 1;
-      dartPhaseDuration += ev.duration;
+      dartPhaseDuration += ev.duration!;
     }
 
     if (ev.name == 'MessageLoop::FlushTasks') {
@@ -89,7 +89,7 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
               'There is already an event that started on this same thread. '
               'Ignoring the previous start. tid=$tid, ev=$ev');
         }
-        prevs[tid] = ev.timestampMicros;
+        prevs[tid!] = ev.timestampMicros!;
         continue;
       }
 
@@ -100,7 +100,7 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
               'not in our part of the timeline). Ignoring. tid=$tid, ev=$ev');
           continue;
         }
-        durationMicros += ev.timestampMicros - prevs[tid];
+        durationMicros += ev.timestampMicros! - prevs[tid]!;
         prevs.remove(tid);
         expiredTasksEvents++;
         continue;
@@ -117,7 +117,7 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
               'Ignoring the previous start. id=$prevFrameRequestId, ev=$ev');
         }
         prevFrameRequestId = ev.json['id'] as String;
-        prevFrameRequestStart = ev.timestampMicros;
+        prevFrameRequestStart = ev.timestampMicros!;
         continue;
       }
 
@@ -134,7 +134,7 @@ AdditionalResults parse(Timeline timeline, TimelineSummary summary) {
           continue;
         }
         var frameRequestDuration =
-            Duration(microseconds: ev.timestampMicros - prevFrameRequestStart);
+            Duration(microseconds: ev.timestampMicros! - prevFrameRequestStart);
         frameRequestDurations.add(frameRequestDuration);
         prevFrameRequestId = null;
         prevFrameRequestStart = null;

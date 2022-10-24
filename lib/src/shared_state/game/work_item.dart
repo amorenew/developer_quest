@@ -11,8 +11,8 @@ abstract class WorkItem extends Aspect with ChildAspect {
   final Map<Skill, double> difficulty;
   final Map<Skill, double> completion;
 
-  List<Character> _assignedTeam;
-  List<Character> get assignedTeam => _assignedTeam;
+  List<Character>? _assignedTeam;
+  List<Character>? get assignedTeam => _assignedTeam;
 
   bool get isComplete => percentComplete == 1;
   List<Skill> get skillsNeeded => difficulty.keys.toList(growable: false);
@@ -28,10 +28,10 @@ abstract class WorkItem extends Aspect with ChildAspect {
   void assignTeam(List<Character> team) {
     if (_assignedTeam != null) {
       // First, mark member who were unassigned as not busy.
-      _assignedTeam.forEach((character) => character.isBusy = false);
+      _assignedTeam?.forEach((character) => character.isBusy = false);
     }
     _assignedTeam = team;
-    _assignedTeam.forEach((character) => character.isBusy = true);
+    _assignedTeam?.forEach((character) => character.isBusy = true);
     markDirty();
   }
 
@@ -39,7 +39,7 @@ abstract class WorkItem extends Aspect with ChildAspect {
     if (_assignedTeam == null) {
       return;
     }
-    for (final character in _assignedTeam) {
+    for (final character in _assignedTeam!) {
       character.isBusy = false;
     }
     _assignedTeam = null;
@@ -57,11 +57,11 @@ abstract class WorkItem extends Aspect with ChildAspect {
       return;
     }
 
-    for (final character in _assignedTeam) {
+    for (final character in _assignedTeam!) {
       for (final skill in character.prowess.keys) {
         if (!skillsNeeded.contains(skill)) continue;
         var prowess = character.prowess[skill];
-        completion[skill] += prowess * _boost;
+        completion[skill] = completion[skill]! + (prowess! * _boost);
       }
     }
     _boost = 1;

@@ -10,7 +10,7 @@ class KittyBed extends StatelessWidget {
 
   final KittyType type;
 
-  const KittyBed({@required this.type, Key key}) : super(key: key);
+  const KittyBed({required this.type, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
@@ -35,7 +35,7 @@ class Kitty extends StatelessWidget {
 
   final KittyType type;
 
-  const Kitty({@required this.type, Key key}) : super(key: key);
+  const Kitty({required this.type, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
@@ -55,7 +55,7 @@ class Kitty extends StatelessWidget {
 class _SizedItem extends StatelessWidget {
   final Widget child;
 
-  const _SizedItem({@required this.child, Key key}) : super(key: key);
+  const _SizedItem({required this.child, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,16 @@ class _SizedItem extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: width < 600 ? 120 : width < 900 ? 160 : 200,
-        maxHeight: height < 600 ? 120 : height < 900 ? 160 : 200,
+        maxWidth: width < 600
+            ? 120
+            : width < 900
+                ? 160
+                : 200,
+        maxHeight: height < 600
+            ? 120
+            : height < 900
+                ? 160
+                : 200,
       ),
       child: child,
     );

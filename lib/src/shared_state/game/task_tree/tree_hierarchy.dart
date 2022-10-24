@@ -26,8 +26,11 @@ class FlattenedTreeData {
 
 /// Flatten the hierarchical tree and store properties necessary to help
 /// define where connecting lines need to be drawn.
-List<FlattenedTreeData> flattenTree(List<TreeData> list,
-    [List<FlattenedTreeData> flattened, List<bool> depth]) {
+List<FlattenedTreeData> flattenTree(
+  List<TreeData> list, [
+  List<FlattenedTreeData>? flattened,
+  List<bool>? depth,
+]) {
   flattened ??= [];
   depth ??= [true];
   for (int i = 0; i < list.length; i++) {

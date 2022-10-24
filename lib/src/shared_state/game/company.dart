@@ -80,27 +80,27 @@ class StatValue<V extends num> extends Aspect
   static final Formatter<num> defaultFormatter = NumberFormat.compact().format;
 
   /// The current value.
-  V _number;
+  V? _number;
 
   /// The value that listeners have been provided with most recently.
   ///
   /// This field is used to make sure we don't notify listeners when they're
   /// already showing the most recent value.
-  String _shownValue;
+  String? _shownValue;
 
   /// The formatter to be used to convert [number] into a String [string].
   final String Function(V) formatter;
 
-  StatValue(this._number, {Formatter statFormatter})
+  StatValue(this._number, {Formatter? statFormatter})
       : assert(_number != null),
         formatter = statFormatter ?? StatValue.defaultFormatter {
-    _shownValue = formatter(_number);
+    _shownValue = formatter(_number!);
   }
 
-  V get number => _number;
+  V get number => _number!;
 
   set number(V newValue) {
-    if ((newValue == 0 && _number != 0) || (newValue.sign != _number.sign)) {
+    if ((newValue == 0 && _number != 0) || (newValue.sign != _number!.sign)) {
       // Special case for significant value changes.
       _number = newValue;
       _shownValue = formatter(newValue);
@@ -122,7 +122,7 @@ class StatValue<V extends num> extends Aspect
   }
 
   @override
-  String get value => _shownValue;
+  String get value => _shownValue!;
 }
 
 /// A function that takes a number and returns its string representation.

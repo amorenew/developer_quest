@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
-import 'package:flare_dart/actor_flags.dart';
-import 'package:flare_dart/actor_image.dart';
+import 'package:flare_flutter/base/actor_flags.dart';
+import 'package:flare_flutter/base/actor_image.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:vector_math/vector_math.dart';
 
@@ -13,7 +13,7 @@ class DesaturatedActor extends FlutterActor {
       return;
     }
     _desaturate = value;
-    artboard.addDirt(artboard.root, DirtyFlags.paintDirty, true);
+    artboard?.addDirt(artboard!.root, DirtyFlags.paintDirty, true);
   }
 
   @override

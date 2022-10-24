@@ -7,7 +7,7 @@ import 'package:dev_rpg/src/shared_state/game/work_item.dart';
 /// Build weighted list of priorities. Put each BugPriority type in the list
 /// n times, where n is the value in bugFrequency.
 List<BugPriority> bugChances = bugFrequency.keys
-    .expand((bug) => List.generate(bugFrequency[bug], (_) => bug))
+    .expand((bug) => List.generate(bugFrequency[bug]!, (_) => bug))
     .toList();
 
 /// Map of Bug types to the frequency that they appear.
@@ -33,7 +33,7 @@ class Bug extends WorkItem {
 
   @override
   void onCompleted() {
-    get<TaskPool>().squashBug(this);
+    get<TaskPool>()?.squashBug(this);
     super.onCompleted();
     markDirty();
   }

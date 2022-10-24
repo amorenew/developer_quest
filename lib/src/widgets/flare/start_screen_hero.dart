@@ -1,11 +1,12 @@
 import 'dart:ui' as ui;
 
-import 'package:flare_dart/math/aabb.dart';
-import 'package:flare_dart/math/mat2d.dart';
+import 'package:flare_flutter/base/math/aabb.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_render_box.dart';
+import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 /// Hero avatar for the start screen.
 /// Has a gradient across the bottom.
@@ -18,14 +19,13 @@ class StartScreenHero extends LeafRenderObjectWidget {
   const StartScreenHero({
     this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
-    this.filename,
-    this.gradient,
+    required this.filename,
+    required this.gradient,
   });
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return StartScreenHeroRenderObject()
-      ..assetBundle = DefaultAssetBundle.of(context)
       ..filename = filename
       ..fit = fit
       ..alignment = alignment
@@ -36,7 +36,6 @@ class StartScreenHero extends LeafRenderObjectWidget {
   void updateRenderObject(BuildContext context,
       covariant StartScreenHeroRenderObject renderObject) {
     renderObject
-      ..assetBundle = DefaultAssetBundle.of(context)
       ..filename = filename
       ..fit = fit
       ..alignment = alignment
@@ -51,13 +50,13 @@ class StartScreenHero extends LeafRenderObjectWidget {
 }
 
 class StartScreenHeroRenderObject extends FlareRenderBox {
-  FlutterActor _lastLoadedActor;
-  FlutterActorArtboard _character;
-  FlutterActorArtboard _nextCharacter;
-  ActorAnimation _idle;
+  FlutterActor? _lastLoadedActor;
+  FlutterActorArtboard? _character;
+  FlutterActorArtboard? _nextCharacter;
+  ActorAnimation? _idle;
   double _animationTime = 0;
-  String _filename;
-  Color gradient;
+  String? _filename;
+  late Color gradient;
   double _crossFade = 0;
 
   @override
@@ -67,15 +66,15 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
   bool advance(double elapsedSeconds) {
     if (_idle != null) {
       _animationTime += elapsedSeconds;
-      _idle.apply(_animationTime % _idle.duration, _character, 1);
-      _character.advance(elapsedSeconds);
+      _idle?.apply(_animationTime % _idle!.duration, _character!, 1);
+      _character?.advance(elapsedSeconds);
     }
     if (_crossFade > 0 || _nextCharacter != null) {
       _crossFade += _nextCharacter == null ? -elapsedSeconds : elapsedSeconds;
       if (_crossFade >= 1 && _nextCharacter != null) {
         _character = _nextCharacter;
-        _idle = _character.getAnimation('idle');
-        _character.initializeGraphics();
+        _idle = _character?.getAnimation('idle');
+        _character?.initializeGraphics();
         _nextCharacter = null;
         advance(0);
       }
@@ -84,7 +83,7 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
   }
 
   @override
-  AABB get aabb => _character?.artboardAABB();
+  AABB get aabb => _character?.artboardAABB() ?? AABB.fromValues(1, 1, 1, 1);
 
   @override
   void paintFlare(Canvas canvas, Mat2D viewTransform) {
@@ -93,13 +92,13 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
       return;
     }
 
-    double paddingArtboardSpace = _character.width;
+    double paddingArtboardSpace = _character!.width;
 
-    _character.draw(canvas);
+    _character?.draw(canvas);
 
     // Get into artboard space to draw the gradient.
-    double height = _character.height * 2;
-    double offsetTop = _character.height / 2;
+    double height = _character!.height * 2;
+    double offsetTop = _character!.height / 2;
     List<Color> colors = <Color>[
       gradient.withOpacity(0),
       gradient.withOpacity(1),
@@ -107,20 +106,21 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
     ];
     List<double> stops = <double>[
       0,
-      (_character.height - offsetTop) / height,
+      (_character!.height - offsetTop) / height,
       1
     ];
 
     Offset start = Offset(
-        -1 * _character.origin[0] * _character.width - paddingArtboardSpace,
-        -1 * _character.origin[1] * _character.height + _character.height / 2);
+        -1 * _character!.origin[0] * _character!.width - paddingArtboardSpace,
+        -1 * _character!.origin[1] * _character!.height +
+            _character!.height / 2);
     Offset end = Offset(start.dx, start.dy + height);
     Paint paint = Paint()
       ..shader = ui.Gradient.linear(start, end, colors, stops)
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(
-        start & Size(_character.width + paddingArtboardSpace * 2, height),
+        start & Size(_character!.width + paddingArtboardSpace * 2, height),
         paint);
 
     if (_crossFade > 0) {
@@ -128,18 +128,23 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
         ..style = PaintingStyle.fill
         ..color = gradient.withOpacity(_crossFade.clamp(0, 1).toDouble());
       canvas.drawRect(
-          Offset(
-                  -1 * _character.origin[0] * _character.width -
-                      paddingArtboardSpace,
-                  -1 * _character.origin[1] * _character.height -
-                      _character.height) &
-              Size(_character.width + paddingArtboardSpace * 2,
-                  _character.height * 3),
-          darken);
+        Offset(
+              -1 * _character!.origin[0] * _character!.width -
+                  paddingArtboardSpace,
+              -1 * _character!.origin[1] * _character!.height -
+                  _character!.height,
+            ) &
+            Size(
+              _character!.width + paddingArtboardSpace * 2,
+              _character!.height * 3,
+            ),
+        darken,
+      );
     }
   }
 
-  String get filename => _filename;
+  String get filename => _filename ?? '';
+
   set filename(String value) {
     if (_filename == value) {
       return;
@@ -150,7 +155,12 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
 
   @override
   Future<void> load() async {
-    FlutterActor actor = await loadFlare(_filename);
+    FlutterActor? actor = await loadFlare(
+      AssetFlare(
+        bundle: rootBundle,
+        name: _filename!,
+      ),
+    );
     if (actor == null) {
       return;
     }
@@ -158,12 +168,12 @@ class StartScreenHeroRenderObject extends FlareRenderBox {
     _lastLoadedActor = actor;
     if (_character != null && !sameActor) {
       _crossFade = double.minPositive;
-      _nextCharacter = actor.artboard.makeInstance() as FlutterActorArtboard;
+      _nextCharacter = actor.artboard?.makeInstance() as FlutterActorArtboard;
       return;
     }
-    _character = actor.artboard.makeInstance() as FlutterActorArtboard;
-    _idle = _character.getAnimation('idle');
-    _character.initializeGraphics();
+    _character = actor.artboard?.makeInstance() as FlutterActorArtboard;
+    _idle = _character?.getAnimation('idle');
+    _character?.initializeGraphics();
     advance(0);
     markNeedsPaint();
   }

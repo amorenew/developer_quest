@@ -5,9 +5,9 @@ class SphinxButton extends StatelessWidget {
   final Widget child;
 
   const SphinxButton({
-    @required this.onPressed,
-    @required this.child,
-    Key key,
+    required this.onPressed,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
   @override

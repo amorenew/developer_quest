@@ -17,9 +17,9 @@ class SuccessRoute extends PageRoute<Animation<double>> {
   static const _victory = 'Winner Winner!';
 
   SuccessRoute({
-    @required String message,
-    @required this.hasNextQuestion,
-    RouteSettings settings,
+    required String message,
+    required this.hasNextQuestion,
+    RouteSettings? settings,
     this.transitionDuration = const Duration(milliseconds: 2500),
     this.opaque = false,
     this.barrierDismissible = false,
@@ -53,10 +53,10 @@ class SuccessRoute extends PageRoute<Animation<double>> {
   final bool barrierDismissible;
 
   @override
-  final Color barrierColor;
+  final Color? barrierColor;
 
   @override
-  final String barrierLabel;
+  final String? barrierLabel;
 
   @override
   final bool maintainState;
@@ -183,22 +183,21 @@ class ProceedButton extends StatelessWidget {
   final String text;
 
   const ProceedButton({
-    @required this.text,
-    Key key,
+    required this.text,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
-      child: FlatButton(
-        onPressed: () {},
-        color: Colors.black,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          fixedSize: const Size.fromWidth(100),
+          padding: const EdgeInsets.all(10),
         ),
+        child: const Text("Press Here", style: TextStyle(color: Colors.white)),
+        onPressed: () {},
       ),
     );
   }
@@ -213,8 +212,9 @@ Future<void> navigateToNextQuestion(
   //
   // If there are no arguments provided to the current route, default to an
   // empty set to exit the game immediately after choosing the correct answer.
-  final args = ModalRoute.of(context).settings.arguments as QuestionArguments ??
-      QuestionArguments();
+  final args =
+      ModalRoute.of(context)?.settings.arguments as QuestionArguments? ??
+          QuestionArguments();
 
   // Push the Success Route and wait for the user to hit the proceed button.
   // When they do, the route will return the "Flying Away" animation.
@@ -230,7 +230,7 @@ Future<void> navigateToNextQuestion(
   // change. When the animation is complete, it navigates to the next question
   // if one is available or back to the original route if the .
   void listener() {
-    if (animation.status == AnimationStatus.reverse && animation.value < 0.6) {
+    if (animation!.status == AnimationStatus.reverse && animation.value < 0.6) {
       if (args.hasNextQuestion) {
         final nextQuestion = args.nextQuestion();
 
@@ -242,7 +242,7 @@ Future<void> navigateToNextQuestion(
       } else {
         Navigator.popUntil(
           context,
-          (route) => !route.settings.name.contains('sphinx'),
+          (route) => !route.settings.name!.contains('sphinx'),
         );
       }
 
@@ -252,5 +252,5 @@ Future<void> navigateToNextQuestion(
   }
 
   // Register the listener
-  animation.addListener(listener);
+  animation!.addListener(listener);
 }

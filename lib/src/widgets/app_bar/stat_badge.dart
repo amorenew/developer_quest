@@ -15,15 +15,17 @@ abstract class StatBadge<T extends num> extends StatefulWidget {
   final double scale;
   final bool isWide;
 
-  @required
   final String flare;
 
-  @required
   final StatValue<T> statValue;
 
-  const StatBadge(this.stat, this.statValue,
-      {this.flare, this.scale = 1, this.isWide})
-      : assert(statValue != null);
+  const StatBadge(
+    this.stat,
+    this.statValue, {
+    required this.flare,
+    this.scale = 1,
+    this.isWide = false,
+  }) : assert(statValue != null);
 
   /// This is intentionally abstract to allow deriving stats to specify
   /// when they should celebrate. N.B. that a value of 0 means to always
@@ -39,12 +41,12 @@ abstract class StatBadge<T extends num> extends StatefulWidget {
 /// amount since the last time it has played the animation.
 class StatBadgeState<T extends num> extends State<StatBadge<T>> {
   final FlareControls controls = FlareControls();
-  T _lastStatValue;
+  late T _lastStatValue;
 
   @override
   void initState() {
     _lastStatValue = widget.statValue.number;
-    widget.statValue?.addListener(valueChanged);
+    widget.statValue.addListener(valueChanged);
     super.initState();
   }
 
@@ -54,7 +56,7 @@ class StatBadgeState<T extends num> extends State<StatBadge<T>> {
   /// Since [widget.statValue] is [ValueListenable], we can subscribe to
   /// its changes in [didUpdateWidget].
   void valueChanged() {
-    T change = widget.statValue.number - _lastStatValue;
+    num change = widget.statValue.number - _lastStatValue;
     if (widget.celebrateAfter == 0 || change > widget.celebrateAfter) {
       controls.play('points');
       _lastStatValue = widget.statValue.number;
@@ -117,7 +119,12 @@ class _SlimStatData extends StatelessWidget {
   final ValueListenable<String> listenable;
   final double scale;
   final String stat;
-  const _SlimStatData({this.listenable, this.scale, this.stat});
+  const _SlimStatData({
+    required this.listenable,
+    required this.scale,
+    required this.stat,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -148,7 +155,12 @@ class _WideStatData extends StatelessWidget {
   final ValueListenable<String> listenable;
   final double scale;
   final String stat;
-  const _WideStatData({this.listenable, this.scale, this.stat});
+  const _WideStatData({
+    required this.listenable,
+    required this.scale,
+    required this.stat,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Row(

@@ -22,15 +22,19 @@ class JoyBadge extends StatBadge<double> {
 enum _Emotion { sad, happy, neutral }
 
 class JoyBadgeState extends StatBadgeState<double> {
-  _Emotion _emotion;
+  _Emotion? _emotion;
 
-  _Emotion get emotion => _emotion;
-  set emotion(_Emotion value) {
+  _Emotion? get emotion => _emotion;
+  set emotion(_Emotion? value) {
+    if (value == null) {
+      return;
+    }
+
     if (value == _emotion) {
       return;
     }
     _emotion = value;
-    switch (_emotion) {
+    switch (_emotion!) {
       case _Emotion.sad:
         controls.play('sad');
         break;

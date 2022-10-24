@@ -46,7 +46,7 @@ class CharacterPool extends AspectContainer<Character> with ChildAspect {
 
   @override
   void update() {
-    int coin = get<World>().company.coin.number;
+    int coin = get<World>()!.company.coin.number;
     bool upgradeAvailable =
         children.any((character) => character.upgradeCost <= coin);
     if (upgradeAvailable != _isUpgradeAvailable) {

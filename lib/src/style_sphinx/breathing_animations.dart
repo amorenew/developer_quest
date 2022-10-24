@@ -7,9 +7,9 @@ class _BreathingBase<T> extends StatefulWidget {
   final Tween<T> tween;
 
   const _BreathingBase({
-    @required this.builder,
-    @required this.tween,
-    Key key,
+    required this.builder,
+    required this.tween,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -18,8 +18,8 @@ class _BreathingBase<T> extends StatefulWidget {
 
 class _BreathingBaseState<T> extends State<_BreathingBase<T>>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<T> _animation;
+  late AnimationController _controller;
+  late Animation<T> _animation;
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _BreathingBaseState<T> extends State<_BreathingBase<T>>
 class Bouncy extends StatelessWidget {
   final Widget child;
 
-  const Bouncy({@required this.child, Key key}) : super(key: key);
+  const Bouncy({required this.child, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +85,10 @@ class Faded extends StatelessWidget {
   final double end;
 
   const Faded({
-    @required this.child,
+    required this.child,
     this.begin = 1,
     this.end = 0.8,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

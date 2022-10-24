@@ -22,7 +22,7 @@ void main() {
       expect(startFinder, findsOneWidget);
 
       // Start the game.
-      expect(find.byType(FlatButton), findsNWidgets(2));
+      expect(find.byType(TextButton), findsNWidgets(2));
       await tester.tap(startFinder);
       await tester.pumpAndSettle();
 

@@ -25,9 +25,9 @@ class GameScreenSlimState extends State<GameScreenSlim> {
 
   GameScreenSlimState() {
     _controller.addListener(() {
-      if (_controller.page.round() != _index) {
+      if (_controller.page?.round() != _index) {
         setState(() {
-          _index = _controller.page.round();
+          _index = _controller.page!.round();
         });
       }
     });
@@ -83,14 +83,14 @@ class GameScreenSlimState extends State<GameScreenSlim> {
         children: [
           Consumer<CharacterPool>(
             builder: (context, characterPool, child) => _BottomNavigationButton(
-                  'assets/flare/TeamIcon.flr',
-                  label: 'Team',
-                  tap: () => _showPageIndex(0),
-                  isSelected: _index == 0,
-                  hasNotification: characterPool.isUpgradeAvailable,
-                  iconSize: const Size(25, 29),
-                  padding: const EdgeInsets.only(top: 10),
-                ),
+              'assets/flare/TeamIcon.flr',
+              label: 'Team',
+              tap: () => _showPageIndex(0),
+              isSelected: _index == 0,
+              hasNotification: characterPool.isUpgradeAvailable,
+              iconSize: const Size(25, 29),
+              padding: const EdgeInsets.only(top: 10),
+            ),
           ),
           _BottomNavigationButton(
             'assets/flare/TasksIcon.flr',
@@ -122,13 +122,15 @@ class _BottomNavigationButton extends StatefulWidget {
   final VoidCallback tap;
   final String label;
 
-  const _BottomNavigationButton(this.flare,
-      {this.isSelected = false,
-      this.hasNotification = false,
-      this.padding = const EdgeInsets.only(top: 15),
-      this.iconSize = const Size(25, 29),
-      this.tap,
-      this.label});
+  const _BottomNavigationButton(
+    this.flare, {
+    required this.tap,
+    required this.label,
+    this.isSelected = false,
+    this.hasNotification = false,
+    this.padding = const EdgeInsets.only(top: 15),
+    this.iconSize = const Size(25, 29),
+  });
 
   @override
   __BottomNavigationButtonState createState() =>
@@ -166,7 +168,7 @@ class __BottomNavigationButtonState extends State<_BottomNavigationButton> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Stack(
-                overflow: Overflow.visible,
+                clipBehavior: Clip.none,
                 children: [
                   Padding(
                     padding: widget.padding,

@@ -5,9 +5,9 @@ class RpgButton extends StatelessWidget {
   final Widget child;
 
   const RpgButton({
-    @required this.onPressed,
-    @required this.child,
-    Key key,
+    required this.onPressed,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
   @override

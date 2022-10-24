@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class QuestionScaffold extends StatelessWidget {
-  final Widget question;
-  final Widget expected;
-  final Widget actual;
+  final Widget? question;
+  final Widget? expected;
+  final Widget? actual;
 
   const QuestionScaffold({
-    Key key,
+    Key? key,
     this.question,
     this.expected,
     this.actual,

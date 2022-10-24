@@ -14,8 +14,8 @@ class TextBubble extends StatelessWidget {
   final EdgeInsets padding;
 
   const TextBubble({
-    @required this.child,
-    Key key,
+    required this.child,
+    Key? key,
     this.padding = const EdgeInsets.all(16),
     this.direction = TextBubbleDirection.left,
     this.radius = const Radius.circular(10),
@@ -71,10 +71,10 @@ class _TextBubbleBackgroundPainter extends CustomPainter {
   final double shadowOffset;
 
   _TextBubbleBackgroundPainter({
-    @required this.direction,
-    @required this.radius,
-    @required this.indicatorSize,
-    @required this.shadowOffset,
+    required this.direction,
+    required this.radius,
+    required this.indicatorSize,
+    required this.shadowOffset,
   });
 
   @override

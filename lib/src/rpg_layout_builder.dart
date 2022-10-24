@@ -13,8 +13,8 @@ typedef RpgLayoutWidgetBuilder = Widget Function(
 /// Builds a widget tree that can depend on the parent widget's width
 class RpgLayoutBuilder extends StatelessWidget {
   const RpgLayoutBuilder({
-    @required this.builder,
-    Key key,
+    required this.builder,
+    Key? key,
   })  : assert(builder != null),
         super(key: key);
 

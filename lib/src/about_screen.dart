@@ -24,14 +24,17 @@ class AboutScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: ButtonTheme(
                   minWidth: 0,
-                  child: FlatButton(
-                    padding: const EdgeInsets.all(0),
-                    shape: null,
-                    onPressed: () => Navigator.pop(context, null),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      fixedSize: const Size.fromWidth(100),
+                      padding: const EdgeInsets.all(0),
+                    ),
                     child: const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
                     ),
+                    onPressed: () => Navigator.pop(context, null),
                   ),
                 ),
               ),

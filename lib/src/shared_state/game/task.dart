@@ -20,7 +20,7 @@ class Task extends WorkItem {
   void onCompleted() {
     _state = TaskState.completed;
 
-    get<TaskPool>().completeTask(this);
+    get<TaskPool>()?.completeTask(this);
     super.onCompleted();
   }
 
@@ -29,7 +29,7 @@ class Task extends WorkItem {
     _state = TaskState.rewarded;
     markDirty();
 
-    get<World>().shipFeature(this);
-    get<TaskPool>().archiveTask(this);
+    get<World>()?.shipFeature(this);
+    get<TaskPool>()?.archiveTask(this);
   }
 }

@@ -8,7 +8,7 @@ import 'package:t_stats/t_stats.dart';
 import 'parse_timeline.dart';
 
 Future<void> main(List<String> args) async {
-  FlutterDriver driver;
+  FlutterDriver? driver;
 
   try {
     driver = await FlutterDriver.connect();
@@ -101,7 +101,7 @@ Future<void> _save(Timeline timeline) async {
   var gitSha = '';
   if (await GitDir.isGitDir('.')) {
     var gitDir = await GitDir.fromExisting('.');
-    var branch = await gitDir.getCurrentBranch();
+    var branch = await gitDir.currentBranch();
     gitSha = branch.sha.substring(0, 8);
   }
 
@@ -125,7 +125,7 @@ Future<void> _save(Timeline timeline) async {
   var frameRequestStats = Statistic.from(
       additional.frameRequestDurations.map((d) => d.inMicroseconds));
 
-  IOSink stats;
+  IOSink? stats;
   try {
     stats = File('test_driver/perf_stats.tsv').openWrite(mode: FileMode.append);
     // Add general build time statistics.
@@ -170,7 +170,7 @@ Future<void> _save(Timeline timeline) async {
     await stats?.close();
   }
 
-  IOSink durations;
+  IOSink? durations;
   try {
     durations =
         File('test_driver/durations.tsv').openWrite(mode: FileMode.append);

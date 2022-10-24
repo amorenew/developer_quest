@@ -10,7 +10,7 @@ class TaskPickerHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Stack(overflow: Overflow.visible, children: [
+    return Stack(clipBehavior: Clip.none, children: [
       showLine
           ? Positioned.fromRect(
               rect: Rect.fromLTWH(26, 25, 2, 35 - shrinkOffset),

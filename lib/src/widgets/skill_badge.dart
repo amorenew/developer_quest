@@ -34,7 +34,7 @@ class SkillBadge extends StatelessWidget {
             SkillIcon(skill),
             const SizedBox(width: 5),
             Text(
-              skillDisplayName[skill].toUpperCase(),
+              skillDisplayName[skill]!.toUpperCase(),
               style:
                   buttonTextStyle.apply(fontSizeDelta: -4, color: Colors.white),
             ),

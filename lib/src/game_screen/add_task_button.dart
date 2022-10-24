@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 
 // A stylized button meant to be used for adding tasks to the task pool.
 class AddTaskButton extends StatefulWidget {
-  final IconData icon;
+  final IconData? icon;
   final Color color;
   final String label;
   final int count;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final double scale;
 
   const AddTaskButton(
     this.label, {
-    Key key,
+    Key? key,
     this.count = 0,
     this.icon,
-    this.color,
+    required this.color,
     this.onPressed,
     this.scale = 1.0,
   }) : super(key: key);
@@ -25,7 +25,7 @@ class AddTaskButton extends StatefulWidget {
 }
 
 class _AddTaskButtonState extends State<AddTaskButton> {
-  bool _isPressed;
+  bool _isPressed = false;
   @override
   void initState() {
     _isPressed = false;
@@ -46,7 +46,7 @@ class _AddTaskButtonState extends State<AddTaskButton> {
 
   void onTap() {
     if (widget.onPressed != null) {
-      widget.onPressed();
+      widget.onPressed!();
     }
   }
 
@@ -75,7 +75,9 @@ class _AddTaskButtonState extends State<AddTaskButton> {
           borderRadius: BorderRadius.all(Radius.circular(20 * widget.scale)),
           color: isDisabled
               ? disabledTaskColor.withOpacity(0.10)
-              : _isPressed ? widget.color.withOpacity(0.8) : widget.color,
+              : _isPressed
+                  ? widget.color.withOpacity(0.8)
+                  : widget.color,
         ),
         child: Row(
           children: [

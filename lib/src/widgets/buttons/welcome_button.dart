@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 
 /// A styled button that animates its accent color.
 class WelcomeButton extends StatefulWidget {
-  final Widget child;
-  final Color background;
-  final IconData icon;
+  final Widget? child;
+  final Color? background;
+  final IconData? icon;
   final String label;
   final double fontSize;
-  @required
-  final VoidCallback onPressed;
+
+  final VoidCallback? onPressed;
   const WelcomeButton({
-    Key key,
+    required this.label,
+    Key? key,
     this.child,
     this.onPressed,
     this.background,
     this.icon,
-    this.label,
     this.fontSize = 16,
   }) : super(key: key);
 
@@ -27,8 +27,8 @@ class WelcomeButton extends StatefulWidget {
 
 class _WelcomeButtonState extends State<WelcomeButton>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<Color> _colorTween;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTween;
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _WelcomeButtonState extends State<WelcomeButton>
 
   @override
   void dispose() {
-    _animationController?.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -63,31 +63,33 @@ class _WelcomeButtonState extends State<WelcomeButton>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) => WideButton(
-            onPressed: widget.onPressed,
-            background: _colorTween.value,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  widget.icon == null
-                      ? Container()
-                      : Padding(
-                          padding: const EdgeInsets.only(right: 13),
-                          child: Icon(
-                            widget.icon,
-                            size: widget.fontSize,
-                            color: Colors.white.withOpacity(0.5),
-                          ),
-                        ),
-                  Text(widget.label.toUpperCase(),
-                      style: buttonTextStyle.apply(
-                          color: Colors.white,
-                          fontSizeDelta:
-                              widget.fontSize - buttonTextStyle.fontSize))
-                ],
-              ),
-            ),
+        onPressed: widget.onPressed,
+        background: _colorTween.value,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              widget.icon == null
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 13),
+                      child: Icon(
+                        widget.icon,
+                        size: widget.fontSize,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                    ),
+              Text(
+                widget.label.toUpperCase(),
+                style: buttonTextStyle.apply(
+                  color: Colors.white,
+                  fontSizeDelta: widget.fontSize - buttonTextStyle.fontSize!,
+                ),
+              )
+            ],
           ),
+        ),
+      ),
     );
   }
 }

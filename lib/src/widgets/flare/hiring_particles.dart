@@ -18,6 +18,12 @@ class HiringParticle {
   /// The phase the particle is in for its horizontal motion which is driven
   /// by an LFO (simple sin wave).
   double phase;
+  HiringParticle({
+    required this.offset,
+    required this.opacity,
+    required this.scale,
+    required this.phase,
+  });
 }
 
 /// This is the class that manages the list of particles that are displayed
@@ -31,16 +37,19 @@ class HiringParticles {
   final Random _random = Random();
   double elapsedSinceEmission = 0;
 
-  HiringParticles({this.color});
+  HiringParticles({required this.color});
   void advance(double elapsedSeconds, Size size) {
     if (_particles.isEmpty) {
       while (_particles.length < particleCount) {
-        _particles.add(HiringParticle()
-          ..offset = Offset(_random.nextDouble() * size.width,
-              _random.nextDouble() * size.height)
-          ..opacity = 0
-          ..phase = _random.nextDouble()
-          ..scale = _random.nextDouble());
+        _particles.add(
+          HiringParticle(
+            offset: Offset(_random.nextDouble() * size.width,
+                _random.nextDouble() * size.height),
+            opacity: 0,
+            phase: _random.nextDouble(),
+            scale: _random.nextDouble(),
+          ),
+        );
       }
     }
 
@@ -64,11 +73,14 @@ class HiringParticles {
     // no more than two per advance
     if (elapsedSinceEmission > 0.1 && _particles.length < particleCount) {
       elapsedSinceEmission = 0;
-      _particles.add(HiringParticle()
-        ..offset = Offset(_random.nextDouble() * size.width, size.height)
-        ..opacity = 0
-        ..phase = _random.nextDouble()
-        ..scale = 0.5 + 0.5 * _random.nextDouble());
+      _particles.add(
+        HiringParticle(
+          offset: Offset(_random.nextDouble() * size.width, size.height),
+          opacity: 0,
+          phase: _random.nextDouble(),
+          scale: 0.5 + 0.5 * _random.nextDouble(),
+        ),
+      );
     }
 
     deadParticles.forEach(_particles.remove);
@@ -83,12 +95,12 @@ class HiringParticles {
       double size = radius * 2;
       double ox = sin(particle.phase * 2) * particleSize * particle.scale;
       canvas.drawOval(
-          Rect.fromLTWH(
-              ox + po.dx - radius, po.dy + fullRadius - radius, size, size),
-          Paint()
-            ..style = PaintingStyle.fill
-            ..color =
-                color.withOpacity(particle.opacity.clamp(0, 1).toDouble()));
+        Rect.fromLTWH(
+            ox + po.dx - radius, po.dy + fullRadius - radius, size, size),
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = color.withOpacity(particle.opacity.clamp(0, 1).toDouble()),
+      );
     }
   }
 }

@@ -7,10 +7,10 @@ import 'package:flutter/rendering.dart';
 
 /// Widget that shows the team that is actively working on a work item.
 class WorkTeam extends StatefulWidget {
-  final List<Character> team;
-  final List<Skill> skillsNeeded;
+  final List<Character>? team;
+  final List<Skill>? skillsNeeded;
   final bool isComplete;
-  const WorkTeam({this.skillsNeeded, this.team, this.isComplete});
+  const WorkTeam({this.skillsNeeded, this.team, this.isComplete = false});
   @override
   _WorkTeamState createState() => _WorkTeamState();
 }
@@ -39,7 +39,7 @@ class _WorkTeamState extends State<WorkTeam> {
   }
 
   void updateCharacterStyles() {
-    if (widget?.team == null) {
+    if (widget.team == null) {
       if (widget.isComplete) {
         for (final _WorkTeamMember member in _workTeam) {
           member.state = HiringBustState.success;
@@ -48,19 +48,22 @@ class _WorkTeamState extends State<WorkTeam> {
       return;
     }
     _workTeam.clear();
-    for (final Character character in widget.team) {
+    for (final Character character in widget.team!) {
       CharacterStyle style = CharacterStyle.from(character);
       if (style == null) {
         continue;
       }
 
-      _workTeam.add(_WorkTeamMember(
+      _workTeam.add(
+        _WorkTeamMember(
           style,
           widget.isComplete
               ? HiringBustState.success
-              : character.contributes(widget.skillsNeeded)
+              : character.contributes(widget.skillsNeeded ?? [])
                   ? HiringBustState.working
-                  : HiringBustState.hired));
+                  : HiringBustState.hired,
+        ),
+      );
     }
   }
 

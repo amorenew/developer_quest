@@ -10,7 +10,7 @@ class WorkListProgress extends StatefulWidget {
   final Color progressColor;
   final WorkItem workItem;
 
-  const WorkListProgress({this.workItem, this.progressColor});
+  const WorkListProgress({required this.workItem, required this.progressColor});
 
   @override
   _WorkListProgressState createState() => _WorkListProgressState();
@@ -18,7 +18,7 @@ class WorkListProgress extends StatefulWidget {
 
 class _WorkListProgressState extends State<WorkListProgress> {
   bool _showBoost = false;
-  Timer _hideBoostTimer;
+  Timer? _hideBoostTimer;
   void _hideBoost() {
     setState(() => _showBoost = false);
   }
@@ -88,8 +88,9 @@ class _WorkListProgressState extends State<WorkListProgress> {
 class TapButton extends StatefulWidget {
   final bool isDisabled;
   final Color color;
-  final VoidCallback onPressed;
-  const TapButton({this.color, this.isDisabled, this.onPressed});
+  final VoidCallback? onPressed;
+  const TapButton(
+      {required this.color, this.isDisabled = false, this.onPressed});
 
   @override
   _TapButtonState createState() => _TapButtonState();
@@ -107,7 +108,7 @@ class _TapButtonState extends State<TapButton> {
 
   void _onTap() {
     if (widget.onPressed != null) {
-      widget.onPressed();
+      widget.onPressed!();
     }
   }
 

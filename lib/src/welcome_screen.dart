@@ -4,9 +4,9 @@ import 'package:dev_rpg/src/game_screen/character_style.dart';
 import 'package:dev_rpg/src/rpg_layout_builder.dart';
 import 'package:dev_rpg/src/shared_state/game/world.dart';
 import 'package:dev_rpg/src/style.dart';
-import 'package:dev_rpg/src/widgets/flare/warmup_flare.dart';
 import 'package:dev_rpg/src/widgets/buttons/welcome_button.dart';
 import 'package:dev_rpg/src/widgets/flare/start_screen_hero.dart';
+import 'package:dev_rpg/src/widgets/flare/warmup_flare.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +19,8 @@ class WelcomeScreen extends StatefulWidget {
 const double _horizontalPadding = 33;
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  CharacterStyle hero;
-  Timer _swapHeroTimer;
+  late CharacterStyle hero;
+   Timer? _swapHeroTimer;
   final Timer _warmupTimer =
       Timer(const Duration(milliseconds: 1500), warmupFlare);
   @override
@@ -104,8 +104,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 /// on portrait mobile devices).
 class _WelcomeScreenSlim extends StatelessWidget {
   final CharacterStyle hero;
-  final VoidCallback start;
-  final VoidCallback about;
+  final VoidCallback? start;
+  final VoidCallback? about;
   const _WelcomeScreenSlim(this.hero, {this.start, this.about});
 
   @override
@@ -195,8 +195,8 @@ class _Title extends StatelessWidget {
 /// Builds the wide version of the welcome screen which is better
 /// suited to TV, desktop, and tablets.
 class _WelcomeScreenWide extends StatelessWidget {
-  final VoidCallback start;
-  final VoidCallback about;
+  final VoidCallback? start;
+  final VoidCallback? about;
   final CharacterStyle hero;
   const _WelcomeScreenWide(this.hero, {this.start, this.about});
   @override

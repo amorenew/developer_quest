@@ -91,11 +91,15 @@ class CharacterStyle {
             'description.'),
   };
 
-  CharacterStyle(
-      {this.flare, this.accent, this.name, this.description = 'N/A'});
+  CharacterStyle({
+    required this.flare,
+    required this.accent,
+    required this.name,
+    this.description = 'N/A',
+  });
 
   static CharacterStyle from(Character character) {
-    return _all[character.id];
+    return _all[character.id]!;
   }
 
   static CharacterStyle random() {

@@ -4,10 +4,10 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:dev_rpg/src/code_chomper/code_chomper.dart';
-import 'package:flare_dart/math/aabb.dart';
-import 'package:flare_dart/math/mat2d.dart';
+import 'package:flare_flutter/base/math/aabb.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_render_box.dart';
+import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +26,7 @@ class CodeChomperScreen extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return CodeChomperScreenRenderObject(DefaultAssetBundle.of(context))
-      ..controller = controller;
+    return CodeChomperScreenRenderObject(rootBundle)..controller = controller;
   }
 
   @override
@@ -47,8 +46,8 @@ class CodeChomperScreen extends LeafRenderObjectWidget {
 /// the CodeChomperScreen to drive the game.
 class CodeChomperController extends ValueNotifier<Offset> {
   final List<String> lines = [];
-  List<String> _templateLines;
-  bool _isGameOver;
+  List<String> _templateLines = [];
+  bool _isGameOver = false;
   bool get isGameOver => _isGameOver;
 
   bool addCode(Offset globalPosition) {
@@ -74,7 +73,7 @@ class CodeChomperController extends ValueNotifier<Offset> {
 /// Renderer for the game. This advances game logic and draws the lines of code
 /// Flare files for Chompy and the tap FUI.
 class CodeChomperScreenRenderObject extends FlareRenderBox {
-  CodeChomperController _controller;
+  CodeChomperController? _controller;
   double _scrollTarget = 0;
   double _scroll = 0;
   double _cursor = 0;
@@ -84,35 +83,43 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
   double _chompTarget = 0;
   //Timer _chompTimer;
   int _numVisibleLines = 0;
-  FlutterActorArtboard _chompy;
-  ActorAnimation _chompyIdle;
-  ActorAnimation _chompyChomp;
-  ActorAnimation _chompyAppear;
-  FlutterActorArtboard _fui;
-  ActorAnimation _fuiTap;
+  FlutterActorArtboard? _chompy;
+  ActorAnimation? _chompyIdle;
+  ActorAnimation? _chompyChomp;
+  ActorAnimation? _chompyAppear;
+  FlutterActorArtboard? _fui;
+  ActorAnimation? _fuiTap;
   double _fuiTime = 0;
-  Offset _fuiOffset;
+  Offset? _fuiOffset;
   int _firstVisibleLine = 0;
 
   CodeChomperController get controller {
-    return _controller;
+    return _controller!;
   }
 
   CodeChomperScreenRenderObject(AssetBundle bundle) {
-    assetBundle = bundle;
-
-    loadFlare('assets/flare/Chomper.flr').then((FlutterActor actor) {
-      _chompy = actor.artboard.makeInstance() as FlutterActorArtboard;
-      _chompy.initializeGraphics();
-      _chompyIdle = _chompy.getAnimation('Idle');
-      _chompyChomp = _chompy.getAnimation('Chomp');
-      _chompyAppear = _chompy.getAnimation('Appear Line');
+    loadFlare(
+      AssetFlare(
+        bundle: bundle,
+        name: "assets/flare/Chomper.flr",
+      ),
+    ).then((FlutterActor? actor) {
+      _chompy = actor?.artboard?.makeInstance() as FlutterActorArtboard;
+      _chompy?.initializeGraphics();
+      _chompyIdle = _chompy?.getAnimation('Idle');
+      _chompyChomp = _chompy?.getAnimation('Chomp');
+      _chompyAppear = _chompy?.getAnimation('Appear Line');
     });
 
-    loadFlare('assets/flare/Chomper FUI Type.flr').then((FlutterActor actor) {
-      _fui = actor.artboard.makeInstance() as FlutterActorArtboard;
-      _fui.initializeGraphics();
-      _fuiTap = _fui.getAnimation('Tap');
+    loadFlare(
+      AssetFlare(
+        bundle: bundle,
+        name: "assets/flare/Chomper FUI Type.flr",
+      ),
+    ).then((FlutterActor? actor) {
+      _fui = actor?.artboard?.makeInstance() as FlutterActorArtboard;
+      _fui?.initializeGraphics();
+      _fuiTap = _fui?.getAnimation('Tap');
     });
   }
 
@@ -132,7 +139,7 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
     }
 
     if (_controller != null) {
-      _fuiOffset = _controller.value;
+      _fuiOffset = _controller?.value;
       _fuiTime = 0;
     }
 
@@ -151,7 +158,7 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
   }
 
   @override
-  bool get isPlaying => attached && !(controller?.isGameOver ?? false);
+  bool get isPlaying => attached && !controller.isGameOver;
 
   @override
   bool get sizedByParent => true;
@@ -185,7 +192,7 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
     var chevron = _MeasuredText('>', color: chompBlue.withOpacity(0.4));
     for (int i = 0; i < _numVisibleLines; i++) {
       canvas.drawParagraph(
-          chevron.paragraph,
+          chevron.paragraph!,
           Offset(offset.dx + _padLeft,
               offset.dy + offsetY + _padTop + i * _chompLineHeight));
 
@@ -199,8 +206,11 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
       var line = renderLine >= 0 && renderLine < lines.length
           ? _MeasuredText(lines[renderLine],
               color: chomp
-                  ? Color.lerp(chompBlue, chompRed, _chomped - _chomped.floor())
-                  : renderLine < _chomped ? chompRed : chompBlue)
+                  ? Color.lerp(
+                      chompBlue, chompRed, _chomped - _chomped.floor())!
+                  : renderLine < _chomped
+                      ? chompRed
+                      : chompBlue)
           : null;
       var lineOffset = Offset(offset.dx + _padCodeLeft,
           offset.dy + offsetY + _padTop + i * _chompLineHeight);
@@ -227,10 +237,10 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
         if (clip) {
           canvas.save();
           double clipWidth =
-              (_cursor - _cursor.floor()) * min(size.width, line.size.width);
-          canvas.clipRect(lineOffset & Size(clipWidth, line.size.height));
+              (_cursor - _cursor.floor()) * min(size.width, line.size!.width);
+          canvas.clipRect(lineOffset & Size(clipWidth, line.size!.height));
         }
-        canvas.drawParagraph(line.paragraph, lineOffset);
+        canvas.drawParagraph(line.paragraph!, lineOffset);
         if (clip) {
           canvas.restore();
         }
@@ -265,16 +275,16 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
                   .transform(max(0, (_chomped % 1) - _chompAppear) /
                       (1 - _chompAppear))
                   .toDouble() *
-              (size.width + _chompy.width * _chompyScale);
+              (size.width + _chompy!.width * _chompyScale);
           canvas.save();
           canvas.translate(
               offset.dx +
                   _padCodeLeft +
                   chompWidth -
-                  _chompy.width * _chompyScale / 4,
+                  _chompy!.width * _chompyScale / 4,
               offset.dy + offsetY + _padTop + i * _chompLineHeight + 13);
           canvas.scale(_chompyScale, _chompyScale);
-          _chompy.draw(canvas);
+          _chompy!.draw(canvas);
           canvas.restore();
         }
       }
@@ -283,7 +293,7 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
 
     if (_fuiOffset != null) {
       canvas.save();
-      canvas.translate(_fuiOffset.dx, _fuiOffset.dy);
+      canvas.translate(_fuiOffset!.dx, _fuiOffset!.dy);
       _fui?.draw(canvas);
       canvas.restore();
     }
@@ -292,7 +302,7 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
   // null bounds, makes the render box not call the paintFlare method
   // which we don't need to use in this case as we'll do custom painting
   @override
-  AABB get aabb => null;
+  AABB get aabb => AABB();
 
   @override
   void advance(double elapsedSeconds) {
@@ -313,28 +323,28 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
     }
 
     _chompyIdle?.apply(
-        (DateTime.now().millisecondsSinceEpoch / 1000) % _chompyIdle.duration,
-        _chompy,
+        (DateTime.now().millisecondsSinceEpoch / 1000) % _chompyIdle!.duration,
+        _chompy!,
         1);
 
     double chompTime = _chomped % 1;
     if (chompTime < _chompAppear && _chompyAppear != null) {
-      double appear = chompTime / _chompAppear * _chompyAppear.duration;
-      _chompyAppear.apply(appear, _chompy, 1);
+      double appear = chompTime / _chompAppear * _chompyAppear!.duration;
+      _chompyAppear!.apply(appear, _chompy!, 1);
     } else {
       _chompyChomp?.apply(
           max(0, (_chomped % 1) - _chompAppear) /
               (1 - _chompAppear) *
-              _chompyChomp.duration,
-          _chompy,
+              _chompyChomp!.duration,
+          _chompy!,
           1);
     }
     _chompy?.advance(elapsedSeconds);
 
     if (_fuiOffset != null) {
       _fuiTime += elapsedSeconds;
-      _fuiTap?.apply(_fuiTime, _fui, 1);
-      _fui.advance(elapsedSeconds);
+      _fuiTap?.apply(_fuiTime, _fui!, 1);
+      _fui?.advance(elapsedSeconds);
     }
 
     _chompNext();
@@ -351,9 +361,9 @@ class CodeChomperScreenRenderObject extends FlareRenderBox {
 class _MeasuredText {
   static const double _maxWidth = 4096;
 
-  ui.Paragraph paragraph;
-  Size size;
-  Offset center;
+  ui.Paragraph? paragraph;
+  Size? size;
+  Offset? center;
   final String text;
   Color color;
 
@@ -364,8 +374,8 @@ class _MeasuredText {
       );
     builder.addText(text);
     paragraph = builder.build();
-    paragraph.layout(const ui.ParagraphConstraints(width: _maxWidth));
-    List<ui.TextBox> boxes = paragraph.getBoxesForRange(0, text.length);
+    paragraph?.layout(const ui.ParagraphConstraints(width: _maxWidth));
+    List<ui.TextBox> boxes = paragraph!.getBoxesForRange(0, text.length);
     size = boxes.isEmpty
         ? Size.zero
         : Size(boxes.last.right - boxes.first.left,

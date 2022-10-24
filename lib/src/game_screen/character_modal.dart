@@ -89,10 +89,13 @@ class CharacterImage extends StatelessWidget {
               alignment: Alignment.topRight,
               child: ButtonTheme(
                 minWidth: 0,
-                child: FlatButton(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    fixedSize: const Size.fromWidth(100),
+                    padding: const EdgeInsets.all(0),
+                  ),
                   key: const ValueKey('close-character-modal'),
-                  padding: const EdgeInsets.all(0),
-                  shape: null,
                   onPressed: () => Navigator.pop(context, null),
                   child: const Icon(
                     Icons.cancel,
@@ -237,7 +240,7 @@ class SkillDisplay extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                skillDisplayName[skill],
+                skillDisplayName[skill]!,
                 style: contentStyle.apply(color: skillTextColor),
               )
             ]),
@@ -251,7 +254,7 @@ class SkillDisplay extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 5),
           child: ProwessProgress(
-              color: skillColor[skill],
+              color: skillColor[skill]!,
               borderRadius: BorderRadius.circular(3.5),
               progress: character.getProwessProgress(skill)),
         )
