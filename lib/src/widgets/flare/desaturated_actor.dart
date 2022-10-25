@@ -26,9 +26,9 @@ class DesaturatedActor extends FlutterActor {
 /// We use this to override the paint and do custom color filtering.
 class DesaturatedActorImage extends FlutterActorImage {
   @override
-  void onPaintUpdated(ui.Paint paint) {
+  void onPaintUpdated(ui.Paint? paint) {
     if (!(artboard.actor as DesaturatedActor).desaturate) {
-      paint.colorFilter = null;
+      paint?.colorFilter = null;
       return;
     }
     // Light blue tinge.
@@ -62,7 +62,7 @@ class DesaturatedActorImage extends FlutterActorImage {
     ]);
 
     greyMatrix.multiply(tintMatrix);
-    paint.colorFilter = ui.ColorFilter.matrix([
+    paint?.colorFilter = ui.ColorFilter.matrix([
       greyMatrix[0],
       greyMatrix[1],
       greyMatrix[2],

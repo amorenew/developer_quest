@@ -41,7 +41,6 @@ class HiringBust extends LeafRenderObjectWidget {
     return HiringBustRenderObject()
       ..particleColor = particleColor
       ..filename = filename
-      .._buildContext = context
       ..fit = fit
       ..alignment = alignment
       ..hiringState = hiringState
@@ -55,7 +54,6 @@ class HiringBust extends LeafRenderObjectWidget {
     renderObject
       ..particleColor = particleColor
       ..filename = filename
-      .._buildContext = context
       ..fit = fit
       ..hiringState = hiringState
       ..alignment = alignment
@@ -80,7 +78,6 @@ class HiringBustRenderObject extends FlareRenderBox {
   DesaturatedActor? _actor;
   HiringParticles? _particles;
   bool? _isPlaying;
-  BuildContext? _buildContext;
 
   @override
   bool get isPlaying => _isPlaying ?? false;
@@ -227,7 +224,7 @@ class HiringBustRenderObject extends FlareRenderBox {
   Future<void> load() async {
     FlutterActor? actor = await loadFlare(
       AssetFlare(
-        bundle: DefaultAssetBundle.of(_buildContext!),
+        bundle: rootBundle,
         name: _filename!,
       ),
     );
