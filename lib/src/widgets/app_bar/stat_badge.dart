@@ -25,7 +25,7 @@ abstract class StatBadge<T extends num> extends StatefulWidget {
     required this.flare,
     this.scale = 1,
     this.isWide = false,
-  }) : assert(statValue != null);
+  });
 
   /// This is intentionally abstract to allow deriving stats to specify
   /// when they should celebrate. N.B. that a value of 0 means to always

@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'code_chomper_screen.dart';
 

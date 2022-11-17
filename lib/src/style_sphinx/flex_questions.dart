@@ -4,7 +4,6 @@ import 'package:dev_rpg/src/style_sphinx/kittens.dart';
 import 'package:dev_rpg/src/style_sphinx/question_scaffold.dart';
 import 'package:dev_rpg/src/style_sphinx/success_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ColumnQuestion extends StatelessWidget {
   static const String routeName = '/sphinx/vertical_positioning';

@@ -57,9 +57,9 @@ class GameScreenSlimState extends State<GameScreenSlim> {
             // changes frequently.
             return RepaintBoundary(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
-                    top: const BorderSide(
+                    top: BorderSide(
                       color: statsSeparatorColor,
                       style: BorderStyle.solid,
                     ),

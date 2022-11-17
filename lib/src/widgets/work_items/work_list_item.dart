@@ -24,9 +24,9 @@ class WorkListItem extends StatelessWidget {
 
   const WorkListItem({
     required this.workItem,
-    this.isExpanded = true,
     required this.heading,
     required this.progressColor,
+    this.isExpanded = true,
     this.handleTap,
   });
 
@@ -55,7 +55,7 @@ class WorkListItem extends StatelessWidget {
     _onAssigned(workItem, characters ?? {});
   }
 
-  void _onAssigned(WorkItem workItem, Set<Character> value) {
+  void _onAssigned(WorkItem workItem, Set<Character>? value) {
     if (value == null) return;
     if (workItem.isComplete) return;
     workItem.assignTeam(value.toList());

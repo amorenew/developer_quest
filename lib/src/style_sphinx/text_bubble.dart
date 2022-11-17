@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// Determines whether the indicator should point left or right
 enum TextBubbleDirection { left, right }

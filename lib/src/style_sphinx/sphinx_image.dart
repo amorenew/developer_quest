@@ -8,7 +8,7 @@ class SphinxImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(image: provider);
+    return const Image(image: provider);
   }
 }
 
@@ -20,7 +20,7 @@ class SphinxWithoutGlassesImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(image: provider);
+    return const Image(image: provider);
   }
 }
 
@@ -32,6 +32,6 @@ class SphinxGlassesImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(image: provider);
+    return const Image(image: provider);
   }
 }

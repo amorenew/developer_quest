@@ -65,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _startTimer();
   }
 
-  bool _initialized = false;
+  final bool _initialized = false;
   @override
   Widget build(BuildContext context) {
     // Hide window chrome.

@@ -12,10 +12,10 @@ class AddTaskButton extends StatefulWidget {
 
   const AddTaskButton(
     this.label, {
+    required this.color,
     Key? key,
     this.count = 0,
     this.icon,
-    required this.color,
     this.onPressed,
     this.scale = 1.0,
   }) : super(key: key);

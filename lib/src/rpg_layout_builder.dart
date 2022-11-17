@@ -15,8 +15,7 @@ class RpgLayoutBuilder extends StatelessWidget {
   const RpgLayoutBuilder({
     required this.builder,
     Key? key,
-  })  : assert(builder != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// Builds the widgets below this widget given this widget's layout width.
   final RpgLayoutWidgetBuilder builder;

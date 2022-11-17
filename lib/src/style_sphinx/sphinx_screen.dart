@@ -30,15 +30,15 @@ class _SphinxScreenState extends State<SphinxScreen> {
 
     return Stack(
       children: <Widget>[
-        Positioned.fill(
+        const Positioned.fill(
           child: Image(
             image: SphinxScreen.background,
             fit: BoxFit.cover,
           ),
         ),
-        Positioned.fill(
+        const Positioned.fill(
           child: Padding(
-            padding: const EdgeInsets.only(top: 75),
+            padding: EdgeInsets.only(top: 75),
             child: Image(
               image: SphinxScreen.pyramid,
               fit: BoxFit.fitHeight,

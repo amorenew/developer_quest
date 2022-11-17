@@ -3,7 +3,6 @@ import 'package:dev_rpg/src/shared_state/game/character.dart';
 import 'package:dev_rpg/src/shared_state/game/skill.dart';
 import 'package:dev_rpg/src/widgets/flare/hiring_bust.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 /// Widget that shows the team that is actively working on a work item.
 class WorkTeam extends StatefulWidget {

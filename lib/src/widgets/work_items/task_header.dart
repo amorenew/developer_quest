@@ -1,11 +1,11 @@
 import 'package:dev_rpg/src/rpg_layout_builder.dart';
 import 'package:dev_rpg/src/shared_state/game/skill.dart';
+import 'package:dev_rpg/src/shared_state/game/task.dart';
 import 'package:dev_rpg/src/shared_state/game/task_blueprint.dart';
 import 'package:dev_rpg/src/style.dart';
 import 'package:dev_rpg/src/widgets/work_items/skill_dot.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:dev_rpg/src/shared_state/game/task.dart';
 
 /// A header for [Task] indicating the rewarded coin and skills
 /// necessary to work on the task.

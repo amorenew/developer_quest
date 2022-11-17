@@ -38,12 +38,7 @@ class TaskBlueprint implements Prerequisite {
       this.coinReward = 80,
       this.priority = 0,
       this.mutuallyExclusive = const [],
-      this.miniGame = MiniGame.none})
-      : assert(name != null),
-        assert(difficulty != null),
-        assert(requirements != null),
-        assert(priority != null),
-        assert(mutuallyExclusive != null);
+      this.miniGame = MiniGame.none});
 
   List<Skill> get skillsNeeded => difficulty.keys.toList(growable: false);
 

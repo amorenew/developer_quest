@@ -5,7 +5,6 @@ import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_render_box.dart';
 import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 /// Hero avatar for the start screen.
@@ -17,10 +16,10 @@ class StartScreenHero extends LeafRenderObjectWidget {
   final Color gradient;
 
   const StartScreenHero({
-    this.fit = BoxFit.contain,
-    this.alignment = Alignment.center,
     required this.filename,
     required this.gradient,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
   });
 
   @override

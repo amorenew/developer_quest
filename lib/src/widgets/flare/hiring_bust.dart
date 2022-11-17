@@ -1,14 +1,13 @@
 import 'dart:math';
 
+import 'package:dev_rpg/src/style.dart';
 import 'package:dev_rpg/src/widgets/flare/desaturated_actor.dart';
 import 'package:dev_rpg/src/widgets/flare/hiring_particles.dart';
-import 'package:dev_rpg/src/style.dart';
 import 'package:flare_flutter/base/math/aabb.dart';
 import 'package:flare_flutter/flare.dart';
+import 'package:flare_flutter/flare_render_box.dart';
 import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flare_flutter/flare_render_box.dart';
 import 'package:flutter/services.dart';
 
 /// The HiringBust displays three different visual states.
@@ -28,10 +27,10 @@ class HiringBust extends LeafRenderObjectWidget {
   final Color particleColor;
 
   const HiringBust({
-    this.fit = BoxFit.contain,
-    this.alignment = Alignment.center,
     required this.hiringState,
     required this.filename,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
     this.particleColor = Colors.black,
     this.isPlaying = false,
   });

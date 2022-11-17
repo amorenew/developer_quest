@@ -121,11 +121,11 @@ class ProjectPickerModal extends StatelessWidget {
     var v1 = _buildTaskPickerSlivers(taskPool.v1.tasks, _tasks, completed);
 
     var slivers = <Widget>[
-      SliverPadding(
-        padding: const EdgeInsets.only(top: 15),
+      const SliverPadding(
+        padding: EdgeInsets.only(top: 15),
         sliver: SliverPersistentHeader(
           pinned: false,
-          delegate: const TaskPickerHeader('Alpha'),
+          delegate: TaskPickerHeader('Alpha'),
         ),
       ),
       SliverList(
@@ -133,9 +133,9 @@ class ProjectPickerModal extends StatelessWidget {
           return alpha[index];
         }, childCount: alpha.length),
       ),
-      SliverPersistentHeader(
+      const SliverPersistentHeader(
         pinned: false,
-        delegate: const TaskPickerHeader('Beta'),
+        delegate: TaskPickerHeader('Beta'),
       ),
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {

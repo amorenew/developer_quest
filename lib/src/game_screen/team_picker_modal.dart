@@ -79,7 +79,7 @@ class TeamPickerModalState extends State<TeamPickerModal> {
                     padding: horizontalPadding,
                     child: Row(
                         children: widget.workItem.skillsNeeded
-                            .map((skill) => SkillBadge(skill))
+                            .map(SkillBadge.new)
                             .toList()),
                   ),
                   Expanded(

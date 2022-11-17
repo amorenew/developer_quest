@@ -152,9 +152,7 @@ class CharacterStats extends StatelessWidget {
                 style: contentSmallStyle,
               ),
               Column(
-                children: character.prowess.keys
-                    .map((Skill skill) => SkillDisplay(skill))
-                    .toList(),
+                children: character.prowess.keys.map(SkillDisplay.new).toList(),
               ),
               const SizedBox(height: 40),
               UpgradeHireButton(_controls),
